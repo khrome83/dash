@@ -2,11 +2,11 @@
 
 ![Dash Logo](https://owo.sh/9F8orWK.png)
 
-Dash is a simple, powerful, and efficient LFU cache for Deno.
+Dash is a simple, powerful, and efficient LRU cache for Deno.
 
 ## How It Works
 
-Dash is a efficient LFU (Least Frequently Used) cache library.  
+Dash is a efficient LRU (Least Recently Used) cache library.  
 This means that when the cache hits it's size limit, it deletes the least used item.  
 If you set your cache limit to 1000 items, and add 1001 items, the least used item will be removed.
 
