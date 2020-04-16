@@ -1,0 +1,21 @@
+name: Deno
+
+on:
+  push:
+    branches:
+      - devel
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: denolib/setup-deno@master
+      with:
+        deno-version: 0.41.0
+    - name: Cache Necessary Dependencies
+      run: |
+        deno cache mod.ts
+        deno cache mod.test.ts
+    - name: Run Library Tests
+      run: deno test
