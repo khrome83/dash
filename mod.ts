@@ -1,26 +1,22 @@
-interface CacheEntry<type> {
-  key: string | number;
-  data: type;
-}
-
 type Nullable<T> = T | null;
 
 class Cache {
   #limit: number;
-  #entries: CacheEntry<any>[];
+  #entries: Map<string | number, any>;
   constructor(cacheLimit: number) {
     this.#limit = cacheLimit;
-    this.#entries = [];
+    this.#entries = new Map();
   }
   set<T>(key: string | number, data: T): void {
-    const entry: CacheEntry<T> = { key, data };
-    if (this.#entries.length >= this.#limit) {
-      this.#entries.shift();
-      this.#entries.push(entry);
-    } else this.#entries.push(entry);
+    if (this.#entries.size >= this.#limit) {
+      this.#entries.delete(this.#entries.keys().next().value);
+      this.#entries.set(key, data);
+    } else this.#entries.set(key, data);
   }
   get(key: string | number): Nullable<any> {
-    const entry = this.#entries.find((e) => e.key == key);
-    return entry?.data ?? null;
+    if (this.#entries.has(key)) {
+      this.#entries.set(key, this.#entries.get(key));
+      return this.#entries.get(key);
+    } else return null;
   }
 }
