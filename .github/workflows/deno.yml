@@ -1,6 +1,9 @@
 name: Deno
 
 on:
+  pull_request:
+    branches:
+      - master
   push:
     branches:
       - devel
