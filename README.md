@@ -1,6 +1,6 @@
 # Dash
 
-![Dash Logo](https://owo.sh/9dSFHHc.png)
+![Dash Logo](https://owo.sh/9F8orWK.png)
 
 Dash is a simple, powerful, and efficient LFU cache for Deno.
 
