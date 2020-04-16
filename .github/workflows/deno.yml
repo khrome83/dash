@@ -1,12 +1,6 @@
 name: Deno
 
-on:
-  pull_request:
-    branches:
-      - master
-  push:
-    branches:
-      - devel
+on: pull_request
 
 jobs:
   test:
