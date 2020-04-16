@@ -3,16 +3,13 @@ type Identifier = string | number;
 
 /**
  * The main Dash cache class
- * @export
- * @class Cache
  */
 export class Cache {
   #limit: number;
   #entries: Map<Identifier, any>;
   /**
    * Creates an instance of Cache
-   * @param {number} cacheLimit
-   * @memberof Cache
+   * @param cacheLimit The max number of items the cache can store
    */
   constructor(cacheLimit: number) {
     this.#limit = cacheLimit;
@@ -20,9 +17,8 @@ export class Cache {
   }
   /**
    * Set's a key:value pair in the cache
-   * @param {Identifier} key
-   * @param {*} data
-   * @memberof Cache
+   * @param key The key to store the value under
+   * @param data The value to store in the cache
    */
   set(key: Identifier, data: any): void {
     if (this.#entries.size >= this.#limit) {
@@ -32,9 +28,7 @@ export class Cache {
   }
   /**
    * Attemps to retrieve a value from the cache
-   * @param {Identifier} key
-   * @returns {Nullable<any>}
-   * @memberof Cache
+   * @param key The key to get a value from the cache
    */
   get(key: Identifier): Nullable<any> {
     if (this.#entries.has(key)) {
@@ -44,18 +38,12 @@ export class Cache {
   }
   /**
    * Returns the internal cache limit
-   * @readonly
-   * @type {number}
-   * @memberof Cache
    */
   get limit(): number {
     return this.#limit;
   }
   /**
    * Returns the current amount of items in the cache
-   * @readonly
-   * @type {number}
-   * @memberof Cache
    */
   get size(): number {
     return this.#entries.size;
