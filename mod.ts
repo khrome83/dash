@@ -11,8 +11,8 @@ export class Cache {
    * Creates an instance of Cache
    * @param cacheLimit The max number of items the cache can store
    */
-  constructor(cacheLimit: number) {
-    this.#limit = cacheLimit;
+  constructor(cacheLimit?: number) {
+    this.#limit = cacheLimit ?? 10000;
     this.#entries = new Map();
   }
   /**
