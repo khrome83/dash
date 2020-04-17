@@ -4,7 +4,7 @@
 
 Dash is a simple, powerful, and efficient LRU cache for Deno.
 
-## How It Works
+## About
 
 Dash is a efficient LRU (Least Recently Used) cache library.  
 This means that when the cache hits it's size limit, it deletes the least used item.  
