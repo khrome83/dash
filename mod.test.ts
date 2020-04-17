@@ -31,7 +31,7 @@ Deno.test("Get 10000 Items", () => getItems(10000));
 Deno.test("Insert 100000 Items", () => insertItems(100000));
 Deno.test("Get 100000 Items", () => getItems(100000));
 
-Deno.test("Check For LFU Item Deletion", () => {
+Deno.test("Check For LRU Item Deletion", () => {
   insertItems(100001);
   assertEquals(cache.get(0), null, "Least frequently used item not deleted");
 });
