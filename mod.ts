@@ -15,6 +15,10 @@ export interface CacheOptions {
    * Wether to serialize json-parsable data
    */
   serialize?: boolean;
+  /**
+   * Use a logical limiting system
+   */
+  logical?: boolean;
 }
 
 /**
@@ -36,14 +40,18 @@ export class Cache {
   #limit: number;
   #entries: Map<Identifier, any>;
   #serialize: boolean;
+  #logical: boolean;
+  #overwrites: number;
   /**
    * Creates an instance of Cache
    * @param options The configuration for the cache
    */
   constructor(options?: CacheOptions) {
+    this.#logical = options?.logical ?? false;
     this.#serialize = options?.serialize ?? false;
     this.#limit = options?.limit ?? 10000;
     this.#entries = new Map();
+    this.#overwrites = 0;
   }
   /**
    * Set's a key:value pair in the cache
@@ -58,6 +66,13 @@ export class Cache {
       serializedData.set(dataString.split("").map((c) => c.charCodeAt(0)));
     }
     if (this.#entries.size >= this.#limit) {
+      if (this.#logical) {
+        this.#overwrites += 1;
+        if (this.#overwrites >= 10) {
+          this.#overwrites = 0;
+          this.#limit += 10;
+        }
+      }
       this.#entries.delete(this.#entries.keys().next().value);
       this.#entries.set(key, serializedData);
     } else this.#entries.set(key, serializedData);
