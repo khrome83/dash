@@ -1,18 +1,48 @@
 type Nullable<T> = T | null;
 type Identifier = string | number;
 
+const decoder = new TextDecoder("utf-8");
+
+/**
+ * The options for the cache class
+ */
+export interface CacheOptions {
+  /**
+   * The max number of items the cache can store (defaults to 10,000)
+   */
+  limit?: number;
+  /**
+   * Wether to serialize json-parsable data
+   */
+  serialize?: boolean;
+}
+
+/**
+ * Check if data is JSON serializable
+ * @param value The value to check
+ */
+function isSerializable(value: any): boolean {
+  if (typeof value == "boolean") return true;
+  else if (typeof value == "number") return true;
+  else if (typeof value == "string") return true;
+  else if (value instanceof Object) return true;
+  else return false;
+}
+
 /**
  * The main Dash cache class
  */
 export class Cache {
   #limit: number;
   #entries: Map<Identifier, any>;
+  #serialize: boolean;
   /**
    * Creates an instance of Cache
    * @param cacheLimit The max number of items the cache can store
    */
-  constructor(cacheLimit: number) {
-    this.#limit = cacheLimit;
+  constructor(options?: CacheOptions) {
+    this.#serialize = options?.serialize ?? false;
+    this.#limit = options?.limit ?? 10000;
     this.#entries = new Map();
   }
   /**
@@ -21,10 +51,16 @@ export class Cache {
    * @param data The value to store in the cache
    */
   set(key: Identifier, data: any): void {
+    let serializedData = data;
+    if (this.#serialize && isSerializable(data)) {
+      const dataString = JSON.stringify(data);
+      serializedData = new Uint8Array(dataString.length);
+      serializedData.set(dataString.split("").map((c) => c.charCodeAt(0)));
+    }
     if (this.#entries.size >= this.#limit) {
       this.#entries.delete(this.#entries.keys().next().value);
-      this.#entries.set(key, data);
-    } else this.#entries.set(key, data);
+      this.#entries.set(key, serializedData);
+    } else this.#entries.set(key, serializedData);
   }
   /**
    * Attemps to retrieve a value from the cache
@@ -33,7 +69,10 @@ export class Cache {
   get(key: Identifier): Nullable<any> {
     if (this.#entries.has(key)) {
       this.#entries.set(key, this.#entries.get(key));
-      return this.#entries.get(key);
+      const data = this.#entries.get(key);
+      if (data instanceof Uint8Array) {
+        return JSON.parse(decoder.decode(data));
+      } else return data;
     } else return null;
   }
   /**
