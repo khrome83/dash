@@ -13,7 +13,10 @@ If you set your cache limit to 1000 items, and add 1001 items, the least used it
 ## Usage
 
 ```ts
-const cache = new Cache(1000);
+const cache = new Cache({
+    limit: 50000,
+    serialize: false,
+});
 cache.set('hello world', 'some value');
 const v = cache.get('hello world');
 console.log(v);
