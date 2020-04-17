@@ -38,7 +38,7 @@ export class Cache {
   #serialize: boolean;
   /**
    * Creates an instance of Cache
-   * @param cacheLimit The max number of items the cache can store
+   * @param options The configuration for the cache
    */
   constructor(options?: CacheOptions) {
     this.#serialize = options?.serialize ?? false;
