@@ -7,7 +7,13 @@ const decoder = new TextDecoder("utf-8");
  * The options for the cache class
  */
 export interface CacheOptions {
+  /**
+   * The max number of items the cache can store (defaults to 10,000)
+   */
   limit?: number;
+  /**
+   * Wether to serialize json-parsable data
+   */
   serialize?: boolean;
 }
 
