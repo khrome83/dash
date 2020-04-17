@@ -3,11 +3,18 @@ type Identifier = string | number;
 
 const decoder = new TextDecoder("utf-8");
 
-interface CacheOptions {
+/**
+ * The options for the cache class
+ */
+export interface CacheOptions {
   limit?: number;
   serialize?: boolean;
 }
 
+/**
+ * Check if data is JSON serializable
+ * @param value The value to check
+ */
 function isSerializable(value: any): boolean {
   if (typeof value == "boolean") return true;
   else if (typeof value == "number") return true;
