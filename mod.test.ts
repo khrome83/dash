@@ -3,6 +3,7 @@ import { Cache } from "./mod.ts";
 import {
   assertEquals,
   assertNotEquals,
+  assert,
 } from "https://deno.land/std@v0.41.0/testing/asserts.ts";
 
 const ncache = new Cache({
@@ -14,6 +15,8 @@ const scache = new Cache({
   limit: 100000,
   serialize: true,
 });
+
+const lcache = new Cache({ limit: 100000, logical: true });
 
 function insertItems(cache: Cache, count: number) {
   for (let i = 0; i < count; i++) cache.set(i, { d: i });
@@ -77,3 +80,10 @@ Deno.test("Check For LRU Item Deletion (Serialized)", () => {
 
 Deno.test("Overflow Cache Limit (Serialized) ", () =>
   insertItems(scache, 200000));
+
+// Logical Cache Resizing
+
+Deno.test("Overflow Logical Cache And Check Size", () => {
+  insertItems(lcache, 200000);
+  assert(lcache.limit > 100000, "The cache did not resize");
+});

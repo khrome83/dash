@@ -2,6 +2,12 @@
 
 ![Dash Logo](https://owo.sh/9F8orWK.png)
 
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/dash/mod.ts)
+[![GitHub issues](https://img.shields.io/github/issues/xpyxel/dash)](https://github.com/xpyxel/dash/issues)
+[![GitHub forks](https://img.shields.io/github/forks/xpyxel/dash)](https://github.com/xpyxel/dash/network)
+[![GitHub stars](https://img.shields.io/github/stars/xpyxel/dash)](https://github.com/xpyxel/dash/stargazers)
+[![GitHub license](https://img.shields.io/github/license/xpyxel/dash)](https://github.com/xpyxel/dash/blob/master/LICENSE)
+
 Dash is a simple, powerful, and efficient LRU cache for Deno.
 
 ## About
