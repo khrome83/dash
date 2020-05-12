@@ -102,4 +102,10 @@ export class Cache {
   get size(): number {
     return this.#entries.size;
   }
+  /**
+   * Returns the internal map of cache entries
+   */
+  get entries(): Map<Identifier, any> {
+    return this.#entries;
+  }
 }
