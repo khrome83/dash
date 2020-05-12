@@ -1,7 +1,8 @@
+import { isSerializable } from "./util.ts";
+const decoder = new TextDecoder("utf-8");
+
 type Nullable<T> = T | null;
 type Identifier = string | number;
-
-const decoder = new TextDecoder("utf-8");
 
 /**
  * The options for the cache class
@@ -19,18 +20,6 @@ export interface CacheOptions {
    * Use a logical limiting system
    */
   logical?: boolean;
-}
-
-/**
- * Check if data is JSON serializable
- * @param value The value to check
- */
-function isSerializable(value: any): boolean {
-  if (typeof value == "boolean") return true;
-  else if (typeof value == "number") return true;
-  else if (typeof value == "string") return true;
-  else if (value instanceof Object) return true;
-  else return false;
 }
 
 /**
@@ -101,5 +90,11 @@ export class Cache {
    */
   get size(): number {
     return this.#entries.size;
+  }
+  /**
+   * Returns the internal map of cache entries
+   */
+  get entries(): Map<Identifier, any> {
+    return this.#entries;
   }
 }
