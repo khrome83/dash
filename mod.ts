@@ -80,6 +80,16 @@ export class Cache {
     } else return null;
   }
   /**
+   * Returns the elements of the cache as an Array of pairs
+   */
+  get array(): Array<[Identifier, any]> {
+    let elements = [];
+    for (let item of this.#entries.entries()) {
+      elements.push(item);
+    }
+    return elements;
+  }
+  /**
    * Returns the internal cache limit
    */
   get limit(): number {
