@@ -4,7 +4,7 @@ import {
   assertEquals,
   assertNotEquals,
   assert,
-} from "https://deno.land/std@v0.50.0/testing/asserts.ts";
+} from "https://deno.land/std@0.57.0/testing/asserts.ts";
 
 const ncache = new Cache({
   limit: 100000,
