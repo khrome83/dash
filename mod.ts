@@ -1,8 +1,5 @@
-import { isSerializable } from "./util.ts";
+import { isSerializable, Nullable, Identifier } from "./util.ts";
 const decoder = new TextDecoder("utf-8");
-
-type Nullable<T> = T | null;
-type Identifier = string | number;
 
 /**
  * The options for the cache class

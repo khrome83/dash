@@ -9,3 +9,6 @@ export function isSerializable(value: any): boolean {
   else if (value instanceof Object) return true;
   else return false;
 }
+
+export type Nullable<T> = T | null;
+export type Identifier = string | number;
