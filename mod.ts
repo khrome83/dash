@@ -86,8 +86,10 @@ export class Cache {
    */
   reset(): void {
     this.#entries.clear();
-    this.#overwrites = 0;
-    if (this.#logical && this.#originalLimit) this.#limit = this.#originalLimit;
+    if (this.#logical) {
+      this.#overwrites = 0;
+      if (this.#originalLimit) this.#limit = this.#originalLimit;
+    }
   }
   /**
    * Returns the elements of the cache as an Array of pairs
