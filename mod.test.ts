@@ -85,5 +85,5 @@ Deno.test("Overflow Cache Limit (Serialized) ", () =>
 
 Deno.test("Overflow Logical Cache And Check Size", () => {
   insertItems(lcache, 200000);
-  assert(lcache.limit > 100000, "The cache did not resize");
+  assert(lcache.properties.limit > 100000, "The cache did not resize");
 });

@@ -1,4 +1,4 @@
-import { isSerializable, Nullable, Identifier } from "./util.ts";
+import { isSerializable, Nullable, Identifier, serialize } from "./util.ts";
 const decoder = new TextDecoder("utf-8");
 
 /**
@@ -19,6 +19,12 @@ export interface CacheOptions {
   logical?: boolean;
 }
 
+interface CacheProperties {
+  limit: number;
+  size: number;
+  overwrites: number;
+}
+
 /**
  * The main Dash cache class
  */
@@ -28,6 +34,7 @@ export class Cache {
   #serialize: boolean;
   #logical: boolean;
   #overwrites: number;
+  #originalLimit: number | undefined;
   /**
    * Creates an instance of Cache
    * @param options The configuration for the cache
@@ -36,6 +43,7 @@ export class Cache {
     this.#logical = options?.logical ?? false;
     this.#serialize = options?.serialize ?? false;
     this.#limit = options?.limit ?? 10000;
+    if (this.#logical) this.#originalLimit = options?.limit ?? 10000;
     this.#entries = new Map();
     this.#overwrites = 0;
   }
@@ -47,9 +55,7 @@ export class Cache {
   set(key: Identifier, data: any): void {
     let serializedData = data;
     if (this.#serialize && isSerializable(data)) {
-      const dataString = JSON.stringify(data);
-      serializedData = new Uint8Array(dataString.length);
-      serializedData.set(dataString.split("").map((c) => c.charCodeAt(0)));
+      serializedData = serialize(data);
     }
     if (this.#entries.size >= this.#limit) {
       if (this.#logical) {
@@ -68,13 +74,20 @@ export class Cache {
    * @param key The key to get a value from the cache
    */
   get(key: Identifier): Nullable<any> {
-    if (this.#entries.has(key)) {
-      this.#entries.set(key, this.#entries.get(key));
-      const data = this.#entries.get(key);
-      if (data instanceof Uint8Array) {
-        return JSON.parse(decoder.decode(data));
-      } else return data;
-    } else return null;
+    if (!this.#entries.has(key)) return null;
+    this.#entries.set(key, this.#entries.get(key));
+    const data = this.#entries.get(key);
+    if (data instanceof Uint8Array) {
+      return JSON.parse(decoder.decode(data));
+    } else return data;
+  }
+  /**
+   * Removes all items from the cache
+   */
+  reset(): void {
+    this.#entries.clear();
+    this.#overwrites = 0;
+    if (this.#logical && this.#originalLimit) this.#limit = this.#originalLimit;
   }
   /**
    * Returns the elements of the cache as an Array of pairs
@@ -87,16 +100,14 @@ export class Cache {
     return elements;
   }
   /**
-   * Returns the internal cache limit
+   * The current internal values of the cache
    */
-  get limit(): number {
-    return this.#limit;
-  }
-  /**
-   * Returns the current amount of items in the cache
-   */
-  get size(): number {
-    return this.#entries.size;
+  get properties(): CacheProperties {
+    return {
+      limit: this.#limit,
+      size: this.#entries.size,
+      overwrites: this.#overwrites,
+    };
   }
   /**
    * Returns the internal map of cache entries
