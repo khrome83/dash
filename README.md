@@ -1,5 +1,7 @@
 # Dash
 
+[Dash Logo](https://i.imgur.com/eB77KAl.png)  
+
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/dash/mod.ts)
 [![GitHub issues](https://img.shields.io/github/issues/xpyxel/dash)](https://github.com/xpyxel/dash/issues)
 [![GitHub forks](https://img.shields.io/github/forks/xpyxel/dash)](https://github.com/xpyxel/dash/network)
