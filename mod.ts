@@ -1,4 +1,11 @@
-import { isSerializable, Nullable, Identifier, serialize } from "./util.ts";
+import {
+  isSerializable,
+  Nullable,
+  Identifier,
+  serialize,
+  CacheState,
+} from "./util.ts";
+
 const decoder = new TextDecoder("utf-8");
 
 /**
@@ -19,9 +26,15 @@ export interface CacheOptions {
   logical?: boolean;
 }
 
-interface CacheProperties {
+/**
+ * The current internal values of the cache
+ */
+export interface CacheProperties {
+  /** The current cache size limit */
   limit: number;
+  /** The current size of the cache */
   size: number;
+  /** The current number of entry overwrites */
   overwrites: number;
 }
 
@@ -29,12 +42,9 @@ interface CacheProperties {
  * The main Dash cache class
  */
 export class Cache {
-  #limit: number;
-  #entries: Map<Identifier, any>;
   #serialize: boolean;
   #logical: boolean;
-  #overwrites: number;
-  #originalLimit: number | undefined;
+  #state: CacheState;
   /**
    * Creates an instance of Cache
    * @param options The configuration for the cache
@@ -42,10 +52,12 @@ export class Cache {
   constructor(options?: CacheOptions) {
     this.#logical = options?.logical ?? false;
     this.#serialize = options?.serialize ?? false;
-    this.#limit = options?.limit ?? 10000;
-    if (this.#logical) this.#originalLimit = options?.limit ?? 10000;
-    this.#entries = new Map();
-    this.#overwrites = 0;
+    this.#state = {
+      entries: new Map(),
+      limit: options?.limit ?? 10000,
+      oldLimit: options?.limit ?? 10000,
+      overwrites: 0,
+    };
   }
   /**
    * Set's a key:value pair in the cache
@@ -57,26 +69,26 @@ export class Cache {
     if (this.#serialize && isSerializable(data)) {
       serializedData = serialize(data);
     }
-    if (this.#entries.size >= this.#limit) {
+    if (this.#state.entries.size >= this.#state.limit) {
       if (this.#logical) {
-        this.#overwrites += 1;
-        if (this.#overwrites >= 10) {
-          this.#overwrites = 0;
-          this.#limit += 10;
+        this.#state.overwrites += 1;
+        if (this.#state.overwrites >= 10) {
+          this.#state.overwrites = 0;
+          this.#state.limit += 10;
         }
       }
-      this.#entries.delete(this.#entries.keys().next().value);
-      this.#entries.set(key, serializedData);
-    } else this.#entries.set(key, serializedData);
+      this.#state.entries.delete(this.#state.entries.keys().next().value);
+      this.#state.entries.set(key, serializedData);
+    } else this.#state.entries.set(key, serializedData);
   }
   /**
    * Attemps to retrieve a value from the cache
    * @param key The key to get a value from the cache
    */
   get(key: Identifier): Nullable<any> {
-    if (!this.#entries.has(key)) return null;
-    this.#entries.set(key, this.#entries.get(key));
-    const data = this.#entries.get(key);
+    if (!this.#state.entries.has(key)) return null;
+    this.#state.entries.set(key, this.#state.entries.get(key));
+    const data = this.#state.entries.get(key);
     if (data instanceof Uint8Array) {
       return JSON.parse(decoder.decode(data));
     } else return data;
@@ -85,10 +97,10 @@ export class Cache {
    * Removes all items from the cache
    */
   reset(): void {
-    this.#entries.clear();
+    this.#state.entries.clear();
     if (this.#logical) {
-      this.#overwrites = 0;
-      if (this.#originalLimit) this.#limit = this.#originalLimit;
+      this.#state.overwrites = 0;
+      if (this.#state.oldLimit) this.#state.limit = this.#state.oldLimit;
     }
   }
   /**
@@ -96,7 +108,7 @@ export class Cache {
    */
   get array(): Array<[Identifier, any]> {
     let elements = [];
-    for (let item of this.#entries.entries()) {
+    for (let item of this.#state.entries.entries()) {
       elements.push(item);
     }
     return elements;
@@ -106,15 +118,15 @@ export class Cache {
    */
   get properties(): CacheProperties {
     return {
-      limit: this.#limit,
-      size: this.#entries.size,
-      overwrites: this.#overwrites,
+      limit: this.#state.limit,
+      size: this.#state.entries.size,
+      overwrites: this.#state.overwrites,
     };
   }
   /**
    * Returns the internal map of cache entries
    */
   get entries(): Map<Identifier, any> {
-    return this.#entries;
+    return this.#state.entries;
   }
 }
