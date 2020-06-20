@@ -2,10 +2,9 @@ import {
   Nullable,
   Identifier,
   serialize,
-  CacheState,
 } from "./util.ts";
 
-const decoder = new TextDecoder("utf-8");
+import { CacheState } from "./state.ts";
 
 /**
  * The options for the cache class
@@ -51,12 +50,7 @@ export class Cache {
   constructor(options?: CacheOptions) {
     this.#logical = options?.logical ?? false;
     this.#serialize = options?.serialize ?? false;
-    this.#state = {
-      entries: new Map(),
-      limit: options?.limit ?? 10000,
-      oldLimit: options?.limit ?? 10000,
-      overwrites: 0,
-    };
+    this.#state = new CacheState(options);
   }
   /**
    * Set's a key:value pair in the cache
@@ -65,39 +59,20 @@ export class Cache {
    */
   set(key: Identifier, data: any): void {
     let serializedData = this.#serialize ? serialize(data) : data;
-    if (this.#state.entries.size >= this.#state.limit) {
-      if (this.#logical) {
-        this.#state.overwrites += 1;
-        if (this.#state.overwrites >= 10) {
-          this.#state.overwrites = 0;
-          this.#state.limit += 10;
-        }
-      }
-      this.#state.entries.delete(this.#state.entries.keys().next().value);
-      this.#state.entries.set(key, serializedData);
-    } else this.#state.entries.set(key, serializedData);
+    this.#state.addItem(key, serializedData);
   }
   /**
    * Attemps to retrieve a value from the cache
    * @param key The key to get a value from the cache
    */
   get(key: Identifier): Nullable<any> {
-    if (!this.#state.entries.has(key)) return null;
-    this.#state.entries.set(key, this.#state.entries.get(key));
-    const data = this.#state.entries.get(key);
-    if (data instanceof Uint8Array) {
-      return JSON.parse(decoder.decode(data));
-    } else return data;
+    return this.#state.getItem(key);
   }
   /**
    * Removes all items from the cache
    */
   reset(): void {
-    this.#state.entries.clear();
-    if (this.#logical) {
-      this.#state.overwrites = 0;
-      if (this.#state.oldLimit) this.#state.limit = this.#state.oldLimit;
-    }
+    this.#state.reset();
   }
   /**
    * Returns the elements of the cache as an Array of pairs
@@ -120,9 +95,8 @@ export class Cache {
    */
   get properties(): CacheProperties {
     return {
-      limit: this.#state.limit,
       size: this.#state.entries.size,
-      overwrites: this.#state.overwrites,
+      ...this.#state.values,
     };
   }
 }
