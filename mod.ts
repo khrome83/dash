@@ -34,7 +34,7 @@ export class Cache {
   #serialize: boolean;
   #logical: boolean;
   #overwrites: number;
-  #originalLimit: number;
+  #originalLimit: number | undefined;
   /**
    * Creates an instance of Cache
    * @param options The configuration for the cache
@@ -43,7 +43,7 @@ export class Cache {
     this.#logical = options?.logical ?? false;
     this.#serialize = options?.serialize ?? false;
     this.#limit = options?.limit ?? 10000;
-    this.#originalLimit = options?.limit ?? 10000;
+    if (this.#logical) this.#originalLimit = options?.limit ?? 10000;
     this.#entries = new Map();
     this.#overwrites = 0;
   }
@@ -87,7 +87,7 @@ export class Cache {
   reset(): void {
     this.#entries.clear();
     this.#overwrites = 0;
-    if (this.#logical) this.#limit = this.#originalLimit;
+    if (this.#logical && this.#originalLimit) this.#limit = this.#originalLimit;
   }
   /**
    * Returns the elements of the cache as an Array of pairs
