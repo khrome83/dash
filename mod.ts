@@ -19,6 +19,11 @@ export interface CacheOptions {
   logical?: boolean;
 }
 
+interface CacheProperties {
+  limit: number;
+  size: number;
+}
+
 /**
  * The main Dash cache class
  */
@@ -85,16 +90,13 @@ export class Cache {
     return elements;
   }
   /**
-   * Returns the internal cache limit
+   * The current internal values of the cache
    */
-  get limit(): number {
-    return this.#limit;
-  }
-  /**
-   * Returns the current amount of items in the cache
-   */
-  get size(): number {
-    return this.#entries.size;
+  get properties(): CacheProperties {
+    return {
+      limit: this.#limit,
+      size: this.#entries.size,
+    };
   }
   /**
    * Returns the internal map of cache entries
