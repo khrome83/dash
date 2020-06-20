@@ -106,12 +106,18 @@ export class Cache {
   /**
    * Returns the elements of the cache as an Array of pairs
    */
-  get array(): Array<[Identifier, any]> {
+  toArray(): Array<[Identifier, any]> {
     let elements = [];
     for (let item of this.#state.entries.entries()) {
       elements.push(item);
     }
     return elements;
+  }
+  /**
+   * Returns the internal map of cache entries
+   */
+  get entries(): Map<Identifier, any> {
+    return this.#state.entries;
   }
   /**
    * The current internal values of the cache
@@ -122,11 +128,5 @@ export class Cache {
       size: this.#state.entries.size,
       overwrites: this.#state.overwrites,
     };
-  }
-  /**
-   * Returns the internal map of cache entries
-   */
-  get entries(): Map<Identifier, any> {
-    return this.#state.entries;
   }
 }
