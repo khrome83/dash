@@ -22,6 +22,7 @@ export interface CacheOptions {
 interface CacheProperties {
   limit: number;
   size: number;
+  overwrites: number;
 }
 
 /**
@@ -96,6 +97,7 @@ export class Cache {
     return {
       limit: this.#limit,
       size: this.#entries.size,
+      overwrites: this.#overwrites,
     };
   }
   /**
