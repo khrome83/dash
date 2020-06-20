@@ -2,7 +2,7 @@
  * Check if data is JSON serializable
  * @param value The value to check
  */
-export function isSerializable(value: any): boolean {
+function isSerializable(value: any): boolean {
   if (typeof value == "boolean") return true;
   else if (typeof value == "number") return true;
   else if (typeof value == "string") return true;
@@ -15,9 +15,11 @@ const encoder = new TextEncoder();
  * Attempts to serialize data into a JSON format
  * @param data The data to serialize
  */
-export function serialize(data: any): Uint8Array {
-  const dataString = JSON.stringify(data);
-  return encoder.encode(dataString);
+export function serialize(data: any): Uint8Array | any {
+  if (isSerializable(data)) {
+    const dataString = JSON.stringify(data);
+    return encoder.encode(dataString);
+  } else return data;
 }
 
 export type Nullable<T> = T | null;

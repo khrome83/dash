@@ -1,5 +1,4 @@
 import {
-  isSerializable,
   Nullable,
   Identifier,
   serialize,
@@ -65,10 +64,7 @@ export class Cache {
    * @param data The value to store in the cache
    */
   set(key: Identifier, data: any): void {
-    let serializedData = data;
-    if (this.#serialize && isSerializable(data)) {
-      serializedData = serialize(data);
-    }
+    let serializedData = this.#serialize ? serialize(data) : data;
     if (this.#state.entries.size >= this.#state.limit) {
       if (this.#logical) {
         this.#state.overwrites += 1;
