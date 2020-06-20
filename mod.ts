@@ -1,4 +1,4 @@
-import { isSerializable, Nullable, Identifier } from "./util.ts";
+import { isSerializable, Nullable, Identifier, serialize } from "./util.ts";
 const decoder = new TextDecoder("utf-8");
 
 /**
@@ -47,9 +47,7 @@ export class Cache {
   set(key: Identifier, data: any): void {
     let serializedData = data;
     if (this.#serialize && isSerializable(data)) {
-      const dataString = JSON.stringify(data);
-      serializedData = new Uint8Array(dataString.length);
-      serializedData.set(dataString.split("").map((c) => c.charCodeAt(0)));
+      serializedData = serialize(data);
     }
     if (this.#entries.size >= this.#limit) {
       if (this.#logical) {
