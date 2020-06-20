@@ -24,3 +24,10 @@ export function serialize(data: any): Uint8Array {
 
 export type Nullable<T> = T | null;
 export type Identifier = string | number;
+
+export interface CacheState {
+  limit: number;
+  entries: Map<Identifier, any>;
+  overwrites: number;
+  oldLimit: number | undefined;
+}
