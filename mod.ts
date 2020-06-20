@@ -72,13 +72,12 @@ export class Cache {
    * @param key The key to get a value from the cache
    */
   get(key: Identifier): Nullable<any> {
-    if (this.#entries.has(key)) {
-      this.#entries.set(key, this.#entries.get(key));
-      const data = this.#entries.get(key);
-      if (data instanceof Uint8Array) {
-        return JSON.parse(decoder.decode(data));
-      } else return data;
-    } else return null;
+    if (!this.#entries.has(key)) return null;
+    this.#entries.set(key, this.#entries.get(key));
+    const data = this.#entries.get(key);
+    if (data instanceof Uint8Array) {
+      return JSON.parse(decoder.decode(data));
+    } else return data;
   }
   /**
    * Returns the elements of the cache as an Array of pairs
