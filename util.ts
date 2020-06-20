@@ -25,7 +25,7 @@ export function serialize(data: any): Uint8Array | any {
 export type Nullable<T> = T | null;
 export type Identifier = string | number;
 
-export interface CacheState {
+export interface State {
   limit: number;
   entries: Map<Identifier, any>;
   overwrites: number;
