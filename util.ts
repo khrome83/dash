@@ -10,16 +10,14 @@ export function isSerializable(value: any): boolean {
   else return false;
 }
 
+const encoder = new TextEncoder();
 /**
  * Attempts to serialize data into a JSON format
  * @param data The data to serialize
  */
 export function serialize(data: any): Uint8Array {
-  let serializedData = null;
   const dataString = JSON.stringify(data);
-  serializedData = new Uint8Array(dataString.length);
-  serializedData.set(dataString.split("").map((c) => c.charCodeAt(0)));
-  return serializedData;
+  return encoder.encode(dataString);
 }
 
 export type Nullable<T> = T | null;
