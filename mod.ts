@@ -34,6 +34,7 @@ export class Cache {
   #serialize: boolean;
   #logical: boolean;
   #overwrites: number;
+  #originalLimit: number;
   /**
    * Creates an instance of Cache
    * @param options The configuration for the cache
@@ -42,6 +43,7 @@ export class Cache {
     this.#logical = options?.logical ?? false;
     this.#serialize = options?.serialize ?? false;
     this.#limit = options?.limit ?? 10000;
+    this.#originalLimit = options?.limit ?? 10000;
     this.#entries = new Map();
     this.#overwrites = 0;
   }
@@ -78,6 +80,14 @@ export class Cache {
     if (data instanceof Uint8Array) {
       return JSON.parse(decoder.decode(data));
     } else return data;
+  }
+  /**
+   * Removes all items from the cache
+   */
+  reset(): void {
+    this.#entries.clear();
+    this.#overwrites = 0;
+    this.#limit = this.#originalLimit;
   }
   /**
    * Returns the elements of the cache as an Array of pairs
