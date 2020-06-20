@@ -41,14 +41,12 @@ export interface CacheProperties {
  */
 export class Cache {
   #serialize: boolean;
-  #logical: boolean;
   #state: CacheState;
   /**
    * Creates an instance of Cache
    * @param options The configuration for the cache
    */
   constructor(options?: CacheOptions) {
-    this.#logical = options?.logical ?? false;
     this.#serialize = options?.serialize ?? false;
     this.#state = new CacheState(options);
   }
