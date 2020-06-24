@@ -6,8 +6,12 @@ const decoder = new TextDecoder("utf-8");
 export class CacheState {
   #internal: State;
   #logical: boolean;
+  #threshold: number;
+  #increase: number;
   constructor(opts?: CacheOptions) {
     this.#logical = opts?.logical ?? false;
+    this.#threshold = opts?.threshold ?? 10;
+    this.#increase = opts?.increase ?? 10;
     this.#internal = {
       limit: opts?.limit ?? 10000,
       oldLimit: opts?.logical ? opts.limit ?? 10000 : undefined,
@@ -19,9 +23,9 @@ export class CacheState {
     if (this.#internal.entries.size >= this.#internal.limit) {
       if (this.#logical) {
         this.#internal.overwrites += 1;
-        if (this.#internal.overwrites >= 10) {
+        if (this.#internal.overwrites >= this.#threshold) {
           this.#internal.overwrites = 0;
-          this.#internal.limit += 10;
+          this.#internal.limit += this.#increase;
         }
       }
       this.#internal.entries.delete(this.#internal.entries.keys().next().value);
