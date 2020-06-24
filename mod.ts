@@ -22,6 +22,14 @@ export interface CacheOptions {
    * Use a logical limiting system
    */
   logical?: boolean;
+  /**
+   * The threshold in which the cache will resize its limit in logical mode
+   */
+  threshold?: number;
+  /**
+   * The amount the cache will increase its limit after the threshold is hit
+   */
+  increase?: number;
 }
 
 /**

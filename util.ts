@@ -27,7 +27,6 @@ export type Identifier = string | number;
 
 export interface State {
   limit: number;
-  entries: Map<Identifier, any>;
   overwrites: number;
   oldLimit: number | undefined;
 }
