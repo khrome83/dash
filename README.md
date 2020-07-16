@@ -20,7 +20,6 @@ If you set your cache limit to 1000 items, and add 1001 items, the least used it
 
 ```ts
 import { Cache } from "https://deno.land/x/dash/mod.ts";
-// import { Cache } from "https://raw.githubusercontent.com/use-seedling/dash/main/mod.ts";
 
 const cache = new Cache({
   limit: 50000,
