@@ -75,6 +75,13 @@ export class Cache {
     return this.#state.getItem(key);
   }
   /**
+   * Check if item exists in cache
+   * @param key The key to get a value from the cache
+   */
+  has(key: Identifier): boolean {
+    return this.#state.hasItem(key);
+  }
+  /**
    * Removes all items from the cache
    */
   reset(): void {
