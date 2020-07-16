@@ -1,6 +1,6 @@
 # Dash
 
-![Dash Logo](https://i.imgur.com/eB77KAl.png)  
+![Dash Logo](https://i.imgur.com/eB77KAl.png)
 
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/dash/mod.ts)
 [![GitHub issues](https://img.shields.io/github/issues/xpyxel/dash)](https://github.com/xpyxel/dash/issues)
@@ -19,11 +19,15 @@ If you set your cache limit to 1000 items, and add 1001 items, the least used it
 ## Usage
 
 ```ts
+import { Cache } from "https://deno.land/x/dash/mod.ts";
+// import { Cache } from "https://raw.githubusercontent.com/use-seedling/dash/main/mod.ts";
+
 const cache = new Cache({
-    limit: 50000,
-    serialize: false,
+  limit: 50000,
+  serialize: false,
 });
-cache.set('hello world', 'some value');
-const v = cache.get('hello world');
-console.log(v);
+
+cache.set("hello world", "some value");
+const v = cache.get("hello world");
+console.log(v); // "some value"
 ```
