@@ -82,6 +82,13 @@ export class Cache {
     return this.#state.hasItem(key);
   }
   /**
+   * Removes individual item from cache
+   */
+  remove(key: Identifier): void {
+    return this.#state.removeItem(key);
+  }
+
+  /**
    * Removes all items from the cache
    */
   reset(): void {
