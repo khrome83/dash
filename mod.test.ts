@@ -87,3 +87,12 @@ Deno.test("Overflow Logical Cache And Check Size", () => {
   insertItems(lcache, 200000);
   assert(lcache.properties.limit > 100000, "The cache did not resize");
 });
+
+// Is In Cache
+Deno.test("Check cache", () => {
+  const cache = new Cache({ limit: 100000, logical: true });
+  cache.set("foo", "bar");
+
+  assert(String(cache.has("foo")), "true");
+  assert(String(cache.has("baz")), "false");
+});

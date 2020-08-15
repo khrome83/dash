@@ -44,6 +44,9 @@ export class CacheState {
       return JSON.parse(decoder.decode(data));
     } else return data;
   }
+  hasItem(key: Identifier): boolean {
+    return this.#entries.has(key);
+  }
   reset(): void {
     this.#entries.clear();
     if (this.#logical) {
