@@ -47,6 +47,9 @@ export class CacheState {
   hasItem(key: Identifier): boolean {
     return this.#entries.has(key);
   }
+  removeItem(key: Identifier): void {
+    this.#entries.delete(key);
+  }
   reset(): void {
     this.#entries.clear();
     if (this.#logical) {

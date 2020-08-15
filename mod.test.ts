@@ -96,3 +96,13 @@ Deno.test("Check cache", () => {
   assert(String(cache.has("foo")), "true");
   assert(String(cache.has("baz")), "false");
 });
+
+// Remove Item
+Deno.test("Remove item", () => {
+  const cache = new Cache({ limit: 100000, logical: true });
+  cache.set("foo", "bar");
+
+  assert(String(cache.has("foo")), "true");
+  assert(String(cache.remove("foo")), "void");
+  assert(String(cache.has("foo")), "false");
+});
