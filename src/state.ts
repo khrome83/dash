@@ -1,5 +1,5 @@
 import { State, Identifier, Nullable } from "./util.ts";
-import { CacheOptions } from "./mod.ts";
+import { CacheOptions } from "./cache.ts";
 
 const decoder = new TextDecoder("utf-8");
 
