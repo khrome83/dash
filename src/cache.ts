@@ -71,29 +71,21 @@ export class Cache {
    * Attemps to retrieve a value from the cache
    * @param key The key to get a value from the cache
    */
-  get(key: Identifier): Nullable<any> {
-    return this.#state.getItem(key);
-  }
+  get = (key: Identifier): Nullable<any> => this.#state.getItem(key);
   /**
    * Check if item exists in cache
    * @param key The key to get a value from the cache
    */
-  has(key: Identifier): boolean {
-    return this.#state.hasItem(key);
-  }
+  has = (key: Identifier): Boolean => this.#state.hasItem(key);
   /**
    * Removes individual item from cache
    */
-  remove(key: Identifier): void {
-    this.#state.removeItem(key);
-  }
+  remove = (key: Identifier): void => this.#state.removeItem(key);
 
   /**
    * Removes all items from the cache
    */
-  reset(): void {
-    this.#state.reset();
-  }
+  reset = (): void => this.#state.reset();
   /**
    * Returns the elements of the cache as an Array of pairs
    */
