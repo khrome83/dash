@@ -1,7 +1,17 @@
+<<<<<<< HEAD:state.ts
 import type { State, Identifier, Nullable } from "./util.ts";
 import type { CacheOptions } from "./mod.ts";
+=======
+import { State, Identifier, Nullable } from "./util.ts";
+import { CacheOptions } from "./cache.ts";
+>>>>>>> 1d0fa4e572bf75623e74c989077e3d191619208c:src/state.ts
 
 const decoder = new TextDecoder("utf-8");
+
+interface CacheValues {
+  limit: number;
+  overwrites: number;
+}
 
 export class CacheState {
   #internal: State;
@@ -62,7 +72,7 @@ export class CacheState {
   get entries(): Map<Identifier, any> {
     return this.#entries;
   }
-  get values(): { limit: number; overwrites: number } {
+  get values(): CacheValues {
     return {
       limit: this.#internal.limit,
       overwrites: this.#internal.overwrites,
