@@ -1,6 +1,9 @@
-import {
+import type {
   Nullable,
   Identifier,
+} from "./util.ts";
+
+import {
   serialize,
 } from "./util.ts";
 
